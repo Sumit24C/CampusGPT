@@ -1,294 +1,328 @@
-# 🎓 CampusGPT
+# CampusGPT 🎓
 
-A modern campus management system with intelligent features and role-based access control. Built as a collaborative project to streamline campus operations and enhance the educational experience.
+A smart campus management system that helps students, faculty, and administrators connect and manage campus activities easily.
 
-## 📖 Overview
+**Developed by Team CodeBuilders** 💻
 
-CampusGPT is a comprehensive web application designed to manage campus operations efficiently. The platform provides dedicated portals for students, faculty, and administrators, each with tailored features and functionalities. Built with modern web technologies, it offers a seamless and intuitive user experience.
+---
 
-## ✨ Key Features
+## What is CampusGPT?
 
-### 🔐 Authentication & Security
-- Secure JWT-based authentication
-- Role-based access control (Student, Faculty, Admin)
-- Protected routes and API endpoints
-- Password encryption using bcrypt
+CampusGPT is a web application designed to make campus life easier for everyone. Students can chat with an AI assistant, view events, and access learning resources. Faculty members can upload materials and track student progress. Administrators can manage users and monitor the entire system.
 
-### 👨‍🎓 Student Portal
-- Personalized dashboard with quick access to resources
-- Chat interface for queries
-- Query history tracking
-- Event calendar and notifications
-- Resource library access
+---
 
-### 👨‍🏫 Faculty Portal
-- Content upload and management
-- Student engagement analytics
-- Course insights and statistics
-- Query monitoring dashboard
+## Features
 
-### 👨‍💼 Admin Portal
-- System monitoring and health checks
-- User management interface
-- System-wide statistics and analytics
-- Database management tools
+### For Students 👨‍🎓
+- **AI Chat Assistant** - Get instant answers to your campus-related questions
+- **Event Calendar** - Stay updated with upcoming campus events
+- **Resource Library** - Access study materials and documents
+- **Query History** - Review your past conversations with the assistant
+- **Personal Dashboard** - See your activity overview
 
-### 🎨 Modern UI/UX
-- Responsive design for all devices
-- Dark theme with gradient accents
-- Smooth animations and transitions
-- Accessible interface components
+### For Faculty 👩‍🏫
+- **Upload Resources** - Share study materials with students
+- **View Insights** - Track how students are using the resources
+- **Manage Content** - Organize and update learning materials
+- **Faculty Dashboard** - Monitor your teaching activities
 
-## 🛠️ Technology Stack
+### For Administrators 🔧
+- **User Management** - Add, edit, or remove users from the system
+- **System Monitoring** - Keep track of platform usage and performance
+- **Dashboard Analytics** - View statistics about students, faculty, and resources
+- **Access Control** - Manage who can access what features
 
-### Frontend
-- **React 19.0.0** - UI library
-- **React Router DOM 7.5.1** - Navigation
-- **Tailwind CSS 3.4.17** - Styling
-- **Radix UI** - Accessible components
-- **Lucide React** - Icon library
-- **Axios** - HTTP client
-- **Vite** - Build tool
+---
 
-### Backend
-- **FastAPI 0.110.1** - Web framework
-- **MongoDB** - Database
-- **Motor** - Async MongoDB driver
-- **PyJWT** - JWT authentication
-- **Bcrypt** - Password hashing
-- **Python 3.8+** - Programming language
+## Technology Stack
 
-## 📋 Prerequisites
+### Frontend (What you see)
+- **React** - For building the user interface
+- **Vite** - Fast development and building
+- **Tailwind CSS** - For styling and design
+- **Radix UI** - Pre-built accessible components
+- **React Router** - For page navigation
+- **Axios** - To communicate with the backend
 
-Ensure you have the following installed on your system:
+### Backend (Behind the scenes)
+- **FastAPI** - Python framework for building APIs
+- **MongoDB** - Database to store all information
+- **JWT** - For secure user login and authentication
+- **Bcrypt** - To keep passwords safe
+- **Motor** - Async database operations
 
-- **Node.js** (v18.0.0 or higher)
-- **Python** (v3.8 or higher)
-- **MongoDB** (v4.4 or higher)
-- **npm** or **yarn**
-- **Git**
+---
 
-## 🚀 Getting Started
+## Getting Started
 
-### 1. Clone the Repository
+### Prerequisites
+Before you start, make sure you have these installed:
+- **Python 3.8+** - For running the backend
+- **Node.js 16+** - For running the frontend
+- **MongoDB** - Database (can be local or cloud)
+- **Git** - For version control
 
+### Installation
+
+#### 1. Clone the Repository
 ```bash
 git clone <repository-url>
 cd CampusGPT
 ```
 
-### 2. Backend Setup
+#### 2. Setup Backend
 
-#### Create and Activate Virtual Environment
-
-**Windows:**
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-**macOS/Linux:**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-#### Install Dependencies
-
+Navigate to the backend folder:
 ```bash
 cd backend
+```
+
+Create a virtual environment:
+```bash
+python -m venv venv
+```
+
+Activate the virtual environment:
+- **Windows**: `venv\Scripts\activate`
+- **Mac/Linux**: `source venv/bin/activate`
+
+Install required packages:
+```bash
 pip install -r requirements.txt
 ```
 
-#### Configure Environment
-
-Create a `.env` file in the `backend` directory:
-
+Create a `.env` file in the backend folder:
 ```env
-MONGO_URI=mongodb://localhost:27017
-DATABASE_NAME=campusgpt_db
-JWT_SECRET=your-super-secure-secret-key-change-this
-JWT_ALGORITHM=HS256
+MONGODB_URL=mongodb://localhost:27017
+DATABASE_NAME=campusgpt
+SECRET_KEY=your-secret-key-here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
-> ⚠️ **Important:** Change the JWT_SECRET to a secure random string in production.
-
-### 3. Frontend Setup
-
-#### Install Dependencies
-
+Start the backend server:
 ```bash
-cd ../frontend
+python -m uvicorn main:app --reload --port 8000
+```
+
+The API will be available at: `http://localhost:8000`
+
+#### 3. Setup Frontend
+
+Open a new terminal and navigate to the frontend folder:
+```bash
+cd frontend
+```
+
+Install dependencies:
+```bash
 npm install
 ```
 
-#### Configure Environment
-
-Create a `.env` file in the `frontend` directory:
-
+Create a `.env` file in the frontend folder:
 ```env
-VITE_BACKEND_URL=http://localhost:8000
+VITE_API_URL=http://localhost:8000/api
 ```
 
-## 🎯 Running the Application
-
-### 1. Start MongoDB
-
-Ensure MongoDB is running on your system:
-
+Start the development server:
 ```bash
-# Windows (if installed as service)
-net start MongoDB
-
-# macOS/Linux
-mongod
-```
-
-### 2. Start Backend Server
-
-**Option A: Using Python directly**
-```bash
-cd backend
-python -m uvicorn server:app --reload --host 127.0.0.1 --port 8000
-```
-
-**Option B: Using PowerShell script (Windows)**
-```bash
-.\run_backend.ps1
-```
-
-The backend API will be available at: `http://127.0.0.1:8000`
-API documentation: `http://127.0.0.1:8000/docs`
-
-### 3. Start Frontend Development Server
-
-In a new terminal:
-
-```bash
-cd frontend
 npm run dev
 ```
 
-The application will be available at: `http://localhost:3000`
-
-## 👥 Demo Accounts
-
-For testing purposes, you can use these demo credentials:
-
-| Role    | Email                  | Password     |
-|---------|------------------------|--------------|
-| Student | student@campus.com     | student123   |
-| Faculty | faculty@campus.com     | faculty123   |
-| Admin   | admin@campus.com       | admin123     |
-
-## 📁 Project Structure
-
-```
-CampusGPT/
-├── backend/
-│   ├── server.py           # FastAPI application & routes
-│   ├── requirements.txt    # Python dependencies
-│   └── .env               # Backend configuration (create this)
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   │   ├── Layout.jsx
-│   │   │   ├── ProtectedRoute.jsx
-│   │   │   └── ui/        # Reusable UI components
-│   │   ├── pages/         # Page components
-│   │   │   ├── Login.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   ├── student/   # Student portal pages
-│   │   │   ├── faculty/   # Faculty portal pages
-│   │   │   └── admin/     # Admin portal pages
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── lib/           # Utility functions
-│   │   ├── App.jsx        # Root component
-│   │   └── main.jsx       # Entry point
-│   ├── public/            # Static assets
-│   ├── package.json       # NPM dependencies
-│   ├── vite.config.js     # Vite configuration
-│   └── .env              # Frontend configuration (create this)
-│
-├── venv/                  # Python virtual environment
-├── run_backend.ps1        # Backend startup script (Windows)
-└── README.md             # Project documentation
-```
-
-## 🔌 API Endpoints
-
-### Authentication
-| Method | Endpoint              | Description           |
-|--------|----------------------|----------------------|
-| POST   | `/api/auth/register` | Register new user    |
-| POST   | `/api/auth/login`    | User login           |
-| GET    | `/api/auth/me`       | Get current user     |
-| POST   | `/api/seed`          | Seed demo users      |
-
-### Student Routes
-| Method | Endpoint                | Description           |
-|--------|------------------------|----------------------|
-| GET    | `/student/dashboard`   | Student dashboard    |
-| GET    | `/student/history`     | Query history        |
-
-### Faculty Routes
-| Method | Endpoint                | Description           |
-|--------|------------------------|----------------------|
-| GET    | `/faculty/dashboard`   | Faculty dashboard    |
-| GET    | `/faculty/insights`    | Analytics & insights |
-
-### Admin Routes
-| Method | Endpoint              | Description           |
-|--------|----------------------|----------------------|
-| GET    | `/admin/dashboard`   | System statistics    |
-| GET    | `/admin/users`       | User management      |
-| GET    | `/admin/monitor`     | System monitoring    |
-
-## 🤝 Contributing
-
-This is a collaborative group project. We welcome contributions from team members.
-
-### Development Workflow
-
-1. Create a feature branch from `main`
-2. Make your changes
-3. Test thoroughly
-4. Submit a pull request for review
-5. Merge after approval
-
-## 📝 License
-
-This project is developed for educational purposes.
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**MongoDB Connection Error:**
-- Ensure MongoDB is running
-- Check the `MONGO_URI` in your `.env` file
-- Verify MongoDB is listening on port 27017
-
-**Port Already in Use:**
-- Kill the process using the port or change the port number
-- Backend: Modify `--port` parameter
-- Frontend: Vite will prompt to use a different port
-
-**Module Not Found:**
-- Ensure you've installed all dependencies
-- Backend: Check if virtual environment is activated
-- Frontend: Run `npm install` again
-
-**Authentication Issues:**
-- Clear browser localStorage
-- Check if JWT_SECRET matches between sessions
-- Verify token expiration settings
-
-## 📞 Contact
-
-For questions or support regarding this project, please contact the development team.
+The application will open at: `http://localhost:3000`
 
 ---
 
-**Built with ❤️ by the CampusGPT Development Team**
+## Quick Start with PowerShell (Windows)
+
+We've included a convenient script to start the backend:
+
+```powershell
+.\run_backend_structured.ps1
+```
+
+This will automatically activate the virtual environment and start the server.
+
+---
+
+## Project Structure
+
+```
+CampusGPT/
+├── backend/                 # Backend API
+│   ├── routes/             # API endpoints
+│   │   ├── auth.py         # Login and registration
+│   │   ├── student.py      # Student features
+│   │   ├── faculty.py      # Faculty features
+│   │   ├── admin.py        # Admin features
+│   │   └── seed.py         # Create demo users
+│   ├── schemas/            # Data models
+│   │   └── user.py         # User data structure
+│   ├── utils/              # Helper functions
+│   │   └── auth.py         # Authentication utilities
+│   ├── config.py           # App configuration
+│   ├── database.py         # Database connection
+│   ├── main.py             # Application entry point
+│   └── requirements.txt    # Python packages
+│
+├── frontend/               # Frontend application
+│   ├── src/
+│   │   ├── components/     # Reusable UI components
+│   │   ├── pages/          # Different pages
+│   │   │   ├── admin/      # Admin pages
+│   │   │   ├── faculty/    # Faculty pages
+│   │   │   └── student/    # Student pages
+│   │   ├── lib/            # Utility functions
+│   │   └── main.jsx        # App entry point
+│   ├── package.json        # Node packages
+│   └── vite.config.js      # Vite configuration
+│
+└── README.md               # This file
+```
+
+---
+
+## User Roles
+
+The system has three types of users:
+
+1. **Student** - Can access learning resources, chat with AI, and view events
+2. **Faculty** - Can upload materials, view insights, and manage content
+3. **Admin** - Full access to manage users and monitor the system
+
+---
+
+## API Documentation
+
+Once the backend is running, you can view the interactive API documentation:
+
+- **Swagger UI**: `http://localhost:8000/docs`
+- **ReDoc**: `http://localhost:8000/redoc`
+
+These pages let you test API endpoints directly from your browser.
+
+---
+
+## Default Demo Users
+
+You can create demo users by calling the seed endpoint:
+
+**POST** `http://localhost:8000/api/seed`
+
+This creates three demo accounts:
+- **Student**: `student@campus.com` / Password: `student123`
+- **Faculty**: `faculty@campus.com` / Password: `faculty123`
+- **Admin**: `admin@campus.com` / Password: `admin123`
+
+---
+
+## Key Features Explained
+
+### Authentication & Security
+- Passwords are encrypted before storing (using bcrypt)
+- JWT tokens are used for secure sessions
+- Each user type has specific access permissions
+- Logged-in users stay signed in until token expires
+
+### Role-Based Access Control
+- Students can't access faculty or admin features
+- Faculty can't access admin features
+- Each role sees only what they're supposed to see
+
+### Modern Design
+- Dark mode for comfortable viewing
+- Responsive design works on phone, tablet, and desktop
+- Clean and intuitive interface
+- Smooth animations and transitions
+
+---
+
+## Development
+
+### Backend Development
+The backend is organized into modules:
+- **routes/** - Define what each API endpoint does
+- **schemas/** - Define the structure of data
+- **utils/** - Reusable functions (like password checking)
+- **config.py** - All settings in one place
+- **database.py** - Database connection management
+
+### Frontend Development
+The frontend uses modern React practices:
+- Components are reusable pieces of UI
+- Pages combine components to create full screens
+- Routing handles navigation between pages
+- State management keeps track of user data
+
+---
+
+## Common Issues & Solutions
+
+### Backend won't start?
+- Make sure MongoDB is running
+- Check if port 8000 is not already in use
+- Verify your `.env` file has correct settings
+- Make sure virtual environment is activated
+
+### Frontend won't start?
+- Delete `node_modules` folder and run `npm install` again
+- Check if port 3000 is available
+- Make sure `.env` file exists with correct API URL
+
+### Can't login?
+- Check if backend is running
+- Verify the API URL in frontend `.env` matches backend address
+- Try creating demo users using the seed endpoint
+
+---
+
+## Contributing
+
+This project is maintained by **Team CodeBuilders**. 
+
+To contribute:
+1. Create a new branch for your feature
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request with a clear description
+
+---
+
+## Support
+
+If you encounter any issues or have questions:
+- Check the API documentation at `/docs`
+- Review the browser console for error messages
+- Check backend logs for API errors
+- Ensure all environment variables are set correctly
+
+---
+
+## License
+
+This project is created by Team CodeBuilders for educational and campus management purposes.
+
+---
+
+## Team CodeBuilders
+
+Built with ❤️ by Team CodeBuilders
+
+**Making campus life smarter, one feature at a time!**
+
+---
+
+## Version History
+
+- **v1.0.0** - Initial release with core features
+  - User authentication (Login/Register)
+  - Role-based dashboards (Student, Faculty, Admin)
+  - AI Chat Assistant
+  - Event management
+  - Resource library
+  - User management
+
+---
+
+**Happy Coding! 🚀**
