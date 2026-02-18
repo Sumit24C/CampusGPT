@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+vectorstore/
+chroma_db/
+dbv1/
+dbv2/
+venv/
+.git/
+.gitignore

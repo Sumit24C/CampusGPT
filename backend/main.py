@@ -9,7 +9,9 @@ from routes import (
     student_router,
     faculty_router,
     admin_router,
-    seed_router
+    seed_router,
+    query_router,
+    ingest_router
 )
 
 # Configure logging
@@ -52,6 +54,8 @@ app.include_router(student_router, prefix=settings.API_PREFIX)
 app.include_router(faculty_router, prefix=settings.API_PREFIX)
 app.include_router(admin_router, prefix=settings.API_PREFIX)
 app.include_router(seed_router, prefix=settings.API_PREFIX)
+app.include_router(query_router, prefix=settings.API_PREFIX)
+app.include_router(ingest_router, prefix=settings.API_PREFIX)
 
 # Root endpoint
 @app.get("/")

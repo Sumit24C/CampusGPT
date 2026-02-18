@@ -1,4 +1,4 @@
-from utils import (
+from .utils import (
     partition_document,
     create_chunks_by_title,
     summarise_chunks,
