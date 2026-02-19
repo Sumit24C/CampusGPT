@@ -271,7 +271,7 @@ export default function StudentChat() {
           <div className="flex-1 space-y-3 overflow-auto px-3 py-3 sm:space-y-4 sm:px-4 sm:py-4">
             {messages.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center text-center">
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-2 text-foreground sm:mb-4 sm:h-14 sm:w-14">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#6366F1]/10 text-[#6366F1] animate-pulse sm:mb-4 sm:h-14 sm:w-14">
                   <MessageSquare className="h-6 w-6 sm:h-7 sm:w-7" />
                 </div>
                 <p className="mb-1 text-xs font-semibold text-foreground sm:text-sm">
@@ -281,6 +281,26 @@ export default function StudentChat() {
                   Ask about your timetable, exam schedule, course requirements, or anything else about
                   campus.
                 </p>
+                <div className="mt-4 flex flex-wrap gap-2 justify-center px-4">
+                  <button
+                    onClick={() => setInput("What are my upcoming courses?")}
+                    className="rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-[10px] text-foreground hover:bg-surface transition-all sm:text-xs"
+                  >
+                    📚 My courses
+                  </button>
+                  <button
+                    onClick={() => setInput("When is my next exam?")}
+                    className="rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-[10px] text-foreground hover:bg-surface transition-all sm:text-xs"
+                  >
+                    📝 Exam schedule
+                  </button>
+                  <button
+                    onClick={() => setInput("What events are happening this week?")}
+                    className="rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-[10px] text-foreground hover:bg-surface transition-all sm:text-xs"
+                  >
+                    🎉 Campus events
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="space-y-2.5 sm:space-y-3">
@@ -288,7 +308,8 @@ export default function StudentChat() {
                   <div
                     key={idx}
                     data-testid={`message-${idx}`}
-                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                    className={`flex animate-in fade-in duration-300 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                    style={{ animationDelay: `${idx * 50}ms` }}
                   >
                     <div className="flex max-w-[85%] flex-col gap-1.5 sm:max-w-[75%] sm:gap-2">
                       <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground sm:gap-2 sm:text-xs">
@@ -312,19 +333,36 @@ export default function StudentChat() {
                         }
                       >
                         <CardContent className="p-2.5 text-xs leading-relaxed sm:p-3 sm:text-sm">
-                          {msg.text || (msg.isStreaming && <Loader2 className="h-3.5 w-3.5 animate-spin sm:h-4 sm:w-4" />)}
+                          {msg.text ? (
+                            <div className="whitespace-pre-wrap">
+                              {msg.text}
+                              {msg.isStreaming && (
+                                <span className="inline-block ml-0.5 w-0.5 h-3.5 bg-[#6366F1] animate-pulse sm:h-4"></span>
+                              )}
+                            </div>
+                          ) : msg.isStreaming ? (
+                            <div className="flex items-center gap-1.5">
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-[#6366F1] sm:h-4 sm:w-4" />
+                              <span className="text-[10px] text-muted-foreground sm:text-xs">Thinking...</span>
+                            </div>
+                          ) : null}
                         </CardContent>
                         {msg.diagram && (
-                          <div className="mt-3 space-y-2">
-                            <div className="text-xs text-indigo-400 font-semibold">
-                              Visual Explanation
+                          <div className="mx-2.5 mb-2.5 mt-3 space-y-2 rounded-lg border border-[#6366F1]/20 bg-[#6366F1]/5 p-3 sm:mx-3 sm:mb-3">
+                            <div className="flex items-center gap-1.5">
+                              <div className="h-1 w-1 rounded-full bg-[#6366F1] animate-pulse"></div>
+                              <span className="text-[10px] font-semibold text-[#6366F1] sm:text-xs">
+                                Visual Explanation
+                              </span>
                             </div>
 
-                            <p className="text-xs text-gray-300">
+                            <p className="text-[10px] text-[#E5E7EB] leading-relaxed sm:text-xs">
                               {msg.diagram.explanation}
                             </p>
 
-                            <MermaidDiagram chart={msg.diagram.diagram} />
+                            <div className="rounded-lg overflow-hidden bg-white/5 p-2">
+                              <MermaidDiagram chart={msg.diagram.diagram} />
+                            </div>
                           </div>
                         )}
                       </Card>
@@ -332,20 +370,24 @@ export default function StudentChat() {
                         <Accordion type="single" collapsible className="w-full">
                           <AccordionItem value={`sources-${idx}`} className="border-none">
                             <AccordionTrigger className="text-[10px] text-muted-foreground hover:text-foreground sm:text-xs">
-                              Sources
+                              <div className="flex items-center gap-1.5">
+                                <div className="h-1 w-1 rounded-full bg-[#10B981]"></div>
+                                <span>Sources ({msg.citations.length})</span>
+                              </div>
                             </AccordionTrigger>
                             <AccordionContent className="space-y-1.5 sm:space-y-2">
-                              {msg.citations.map((source) => (
+                              {msg.citations.map((source, sourceIdx) => (
                                 <div
                                   key={source.id}
-                                  className="flex flex-col gap-1.5 rounded-lg border border-border bg-surface-2 px-2.5 py-1.5 text-xs text-foreground sm:flex-row sm:items-center sm:justify-between sm:px-3 sm:py-2"
+                                  className="flex flex-col gap-1.5 rounded-lg border border-border bg-surface-2 px-2.5 py-1.5 text-xs text-foreground transition-all hover:border-[#6366F1]/50 hover:bg-[#6366F1]/5 sm:flex-row sm:items-center sm:justify-between sm:px-3 sm:py-2"
+                                  style={{ animationDelay: `${sourceIdx * 50}ms` }}
                                 >
                                   <span className="text-[10px] font-medium sm:text-xs">{source.name}</span>
                                   <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
-                                    <Badge className="rounded-full border-0 bg-surface-2 px-1.5 py-0.5 text-[9px] text-foreground sm:px-2 sm:text-[10px]">
+                                    <Badge className="rounded-full border-0 bg-[#6366F1]/20 px-1.5 py-0.5 text-[9px] text-[#818CF8] sm:px-2 sm:text-[10px]">
                                       {source.label}
                                     </Badge>
-                                    <Badge className="rounded-full border-0 bg-surface-2 px-1.5 py-0.5 text-[9px] text-foreground sm:px-2 sm:text-[10px]">
+                                    <Badge className="rounded-full border-0 bg-[#10B981]/20 px-1.5 py-0.5 text-[9px] text-[#34D399] sm:px-2 sm:text-[10px]">
                                       Page {source.page}
                                     </Badge>
                                     <Badge className="rounded-full border-0 bg-surface-2 px-1.5 py-0.5 text-[9px] text-foreground sm:px-2 sm:text-[10px]">
@@ -380,20 +422,20 @@ export default function StudentChat() {
                 data-testid="chat-input"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask a question..."
+                placeholder={isLoading ? "CampusGPT is thinking..." : "Ask a question..."}
                 disabled={isLoading}
-                className="h-10 flex-1 rounded-xl border-border bg-surface-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary sm:h-11 sm:text-sm"
+                className="h-10 flex-1 rounded-xl border-border bg-surface-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-60 sm:h-11 sm:text-sm"
               />
               <Button
                 type="submit"
                 data-testid="send-button"
                 disabled={isLoading || !input.trim()}
-                className="h-10 rounded-xl bg-primary px-3 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 sm:h-10 sm:px-5 sm:text-sm"
+                className="h-10 rounded-xl bg-primary px-3 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all sm:h-10 sm:px-5 sm:text-sm"
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="h-3.5 w-3.5 animate-spin sm:mr-2 sm:h-4 sm:w-4" />
-                    <span className="hidden sm:inline">Sending...</span>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-primary-foreground sm:mr-2 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Processing...</span>
                   </>
                 ) : (
                   <>

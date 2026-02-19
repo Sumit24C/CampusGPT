@@ -36,6 +36,7 @@ app.add_middleware(
     allow_origins=settings.CORS_ORIGINS.split(','),
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Event handlers
