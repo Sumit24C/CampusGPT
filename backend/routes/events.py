@@ -108,9 +108,69 @@ async def seed_events():
         events = [
             {
                 "id": str(uuid.uuid4()),
-                "title": "T-Spark Annual Sports Festival",
-                "description": "Annual Sports Festival for all engineering students",
-                "date": "2026-01-03",
+                "title": "ACM Symposium",
+                "description": "Technical symposium organized by ACM student chapter with industry speakers",
+                "date": "2026-02-23",
+                "day": "Monday",
+                "category": "technical",
+                "organizer": "ACM",
+                "is_featured": True
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Cultural Days Celebration 2026",
+                "description": "Multi-day cultural festival with dance, music, and drama competitions",
+                "date": "2026-02-25",
+                "day": "Wednesday",
+                "category": "cultural",
+                "organizer": "TSDW",
+                "is_featured": True
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Annual Tech Symposium",
+                "description": "Technical symposium featuring latest trends in AI, ML, and Cloud Computing",
+                "date": "2026-03-05",
+                "day": "Thursday",
+                "category": "technical",
+                "organizer": "IEEE TCET",
+                "is_featured": True
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Blood Donation Camp",
+                "description": "Raktdaan Se Jeevandaan - Blood donation drive organized by NSS",
+                "date": "2026-03-10",
+                "day": "Tuesday",
+                "category": "nss",
+                "organizer": "NSS",
+                "is_featured": False
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Industry Readiness Workshop",
+                "description": "Week-long industry preparation, resume building, and interview training",
+                "date": "2026-02-28",
+                "day": "Saturday",
+                "category": "workshop",
+                "organizer": "Training & Placement",
+                "is_featured": True
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "E Summit 2026",
+                "description": "Entrepreneurship Summit with startup pitches and investor networking",
+                "date": "2026-03-15",
+                "day": "Sunday",
+                "category": "technical",
+                "organizer": "IIC-EDIC",
+                "is_featured": True
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Annual Sports Festival - T-Spark",
+                "description": "Inter-department sports competition with cricket, basketball, and athletics",
+                "date": "2026-03-20",
                 "day": "Friday",
                 "category": "sports",
                 "organizer": "TCET Sports Committee",
@@ -118,69 +178,9 @@ async def seed_events():
             },
             {
                 "id": str(uuid.uuid4()),
-                "title": "E Summit 2026",
-                "description": "Entrepreneurship Summit organized by IIC-EDIC",
-                "date": "2026-01-23",
-                "day": "Friday",
-                "category": "technical",
-                "organizer": "IIC-EDIC",
-                "is_featured": True
-            },
-            {
-                "id": str(uuid.uuid4()),
-                "title": "Republic Day Celebration",
-                "description": "Republic Day celebration with NCC parade and cultural programs",
-                "date": "2026-01-26",
-                "day": "Monday",
-                "category": "cultural",
-                "organizer": "NCC/NSS",
-                "is_featured": True
-            },
-            {
-                "id": str(uuid.uuid4()),
-                "title": "Blood Donation Camp",
-                "description": "Raktdaan Se Jeevandaan - Blood donation drive organized by NSS",
-                "date": "2026-02-06",
-                "day": "Friday",
-                "category": "nss",
-                "organizer": "NSS",
-                "is_featured": False
-            },
-            {
-                "id": str(uuid.uuid4()),
-                "title": "Industry Readiness Week",
-                "description": "Week-long industry preparation and placement training",
-                "date": "2026-01-05",
-                "day": "Monday",
-                "category": "workshop",
-                "organizer": "Training & Placement",
-                "is_featured": False
-            },
-            {
-                "id": str(uuid.uuid4()),
-                "title": "ACM Symposium",
-                "description": "Technical symposium organized by ACM student chapter",
-                "date": "2026-02-13",
-                "day": "Friday",
-                "category": "technical",
-                "organizer": "ACM",
-                "is_featured": False
-            },
-            {
-                "id": str(uuid.uuid4()),
-                "title": "Cultural Days Celebration",
-                "description": "Multi-day cultural festival with various competitions",
-                "date": "2026-02-09",
-                "day": "Monday",
-                "category": "cultural",
-                "organizer": "TSDW",
-                "is_featured": True
-            },
-            {
-                "id": str(uuid.uuid4()),
-                "title": "AI & Innovation Sprints",
-                "description": "Rapid Prototyping for Digital Transformation workshop",
-                "date": "2026-01-16",
+                "title": "AI & Machine Learning Workshop",
+                "description": "Hands-on workshop on building ML models and deploying AI applications",
+                "date": "2026-02-27",
                 "day": "Friday",
                 "category": "workshop",
                 "organizer": "IIC-EDIC",
@@ -188,10 +188,10 @@ async def seed_events():
             },
             {
                 "id": str(uuid.uuid4()),
-                "title": "Himalayan Meditation Event",
-                "description": "Meditation and wellness session series for students",
-                "date": "2026-01-23",
-                "day": "Friday",
+                "title": "Wellness & Meditation Session",
+                "description": "Stress management and meditation workshop for students",
+                "date": "2026-03-08",
+                "day": "Sunday",
                 "category": "other",
                 "organizer": "S.O.R.T. & Literary",
                 "is_featured": False
@@ -199,12 +199,32 @@ async def seed_events():
             {
                 "id": str(uuid.uuid4()),
                 "title": "Tree Plantation Drive",
-                "description": "Environmental awareness and tree plantation activity",
-                "date": "2026-01-31",
-                "day": "Saturday",
+                "description": "Environmental awareness campaign and tree plantation activity",
+                "date": "2026-03-12",
+                "day": "Thursday",
                 "category": "nss",
                 "organizer": "NSS & Green Club",
                 "is_featured": False
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Hackathon 2026",
+                "description": "24-hour coding hackathon with prizes worth ₹50,000",
+                "date": "2026-03-22",
+                "day": "Sunday",
+                "category": "technical",
+                "organizer": "ACM & IEEE",
+                "is_featured": True
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Career Fair 2026",
+                "description": "Campus placement drive with 50+ companies recruiting for internships and jobs",
+                "date": "2026-03-25",
+                "day": "Wednesday",
+                "category": "academic",
+                "organizer": "Training & Placement",
+                "is_featured": True
             }
         ]
         
