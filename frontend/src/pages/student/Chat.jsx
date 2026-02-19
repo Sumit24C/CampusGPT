@@ -239,7 +239,7 @@ export default function StudentChat() {
         {/* Chat window */}
         <Card className="flex h-full flex-1 flex-col border border-border bg-card shadow-md shadow-black/20">
           {/* Top bar */}
-          <div className="flex flex-col gap-2 border-b border-border px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-3">
+          <div className="flex flex-shrink-0 flex-col gap-2 border-b border-border px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-3">
             <div className="space-y-0.5">
               <p className="text-xs font-semibold text-foreground sm:text-sm">Chat with CampusGPT</p>
               <p className="text-[10px] text-muted-foreground sm:text-xs">
@@ -367,7 +367,7 @@ export default function StudentChat() {
           </div>
 
           {/* Input */}
-          <div className="border-t border-border bg-surface-2 px-3 py-2.5 sm:px-4 sm:py-3">
+          <div className="flex-shrink-0 border-t border-border bg-surface-2 px-3 py-2.5 sm:px-4 sm:py-3">
             <form
               className="flex gap-2 sm:gap-3"
               onSubmit={(e) => {
