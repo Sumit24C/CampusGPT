@@ -60,7 +60,8 @@ app.include_router(query_router, prefix=settings.API_PREFIX)
 app.include_router(ingest_router, prefix=settings.API_PREFIX)
 app.include_router(diagram_router, prefix=settings.API_PREFIX + "/diagram")
 
-# Root endpoint
+# Root endpointgit status
+
 @app.get("/")
 async def root():
     return {
