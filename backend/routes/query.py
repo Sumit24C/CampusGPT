@@ -1,8 +1,5 @@
 from fastapi import APIRouter, Depends
-from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-import json
-import asyncio
 from typing import Optional
 from datetime import datetime
 
@@ -22,91 +19,78 @@ diagram_service = DiagramService()
 
 class QueryRequest(BaseModel):
     question: str
-    stream: Optional[bool] = False
-
+    session_id: str
 
 @router.post("")
 async def ask_question(
     request: QueryRequest,
     current_user: dict = Depends(require_role(["student", "faculty", "admin"]))
 ):
-    question = request.question
+    try:
+        print(request)
+        question = request.question
+        conversation_id = request.session_id
 
-    # 🔥 STEP 1: Decide if diagram needed
-    decision = decision_service.decide(question)
-    needs_diagram = decision.get("needs_diagram", False)
-    diagram_query = decision.get("diagram_query", "")
-    diagram_data = None
+        db = await get_database()
 
-    # 🔥 STEP 2: Generate diagram (safe)
-    if needs_diagram:
-        try:
-            diagram_result = diagram_service.generate_diagram(diagram_query)
-            if diagram_result.get("success"):
-                diagram_data = {
-                    "explanation": diagram_result["explanation"],
-                    "diagram": diagram_result["diagram"]
-                }
-        except Exception as e:
-            print(f"[Diagram Error] {str(e)}")
-
-    # 🔥 STEP 3: Retrieve chunks
-    chunks = retrieve_chunks(question, k=3)
-
-    # 🔥 STREAM MODE
-    if request.stream:
-
-        async def event_generator():
-            try:
-                answer = generate_final_answer(chunks=chunks, query=question)
-
-                # Stream answer text
-                words = answer.answer.split()
-                for i, word in enumerate(words):
-                    yield f"data: {json.dumps({'type': 'chunk', 'data': word + (' ' if i < len(words)-1 else '')})}\n\n"
-                    await asyncio.sleep(0.02)
-
-                # Send citations explicitly at end
-                yield f"data: {json.dumps({'type': 'citations', 'data': [c.model_dump() for c in answer.citations]})}\n\n"
-
-                # Send diagram if present
-                if diagram_data:
-                    yield f"data: {json.dumps({'type': 'diagram', 'data': diagram_data})}\n\n"
-
-                yield f"data: {json.dumps({'type': 'done'})}\n\n"
-
-            except Exception as e:
-                yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
-
-        return StreamingResponse(
-            event_generator(),
-            media_type="text/event-stream",
-            headers={
-                "Cache-Control": "no-cache",
-                "Connection": "keep-alive",
+        previous_messages = await db.query_history.find(
+            {
+                "conversation_id": conversation_id,
+                "email": current_user.get("email")
             }
+        ).sort("timestamp", 1).limit(5).to_list(5)
+
+        conversation_context = ""
+        for item in previous_messages:
+            conversation_context += f"User: {item['question']}\n"
+            conversation_context += f"Assistant: {item['answer']}\n"
+
+        chunks = retrieve_chunks(question, k=3)
+
+        final_answer = generate_final_answer(
+            chunks=chunks,
+            query=question,
+            conversation_context=conversation_context
         )
 
-    # 🔥 NON-STREAM MODE
-    else:
-        answer = generate_final_answer(chunks=chunks, query=question)
+        decision = decision_service.decide(question)
+        needs_diagram = decision.get("needs_diagram", False)
+        diagram_response = None
 
-        # Save history
-        try:
-            db = await get_database()
-            await db.query_history.insert_one({
-                "user_id": current_user.get("user_id"),
-                "email": current_user.get("email"),
-                "question": question,
-                "answer": answer.model_dump(),
-                "diagram": diagram_data,
-                "timestamp": datetime.utcnow()
-            })
-        except Exception as e:
-            print(f"Error saving history: {e}")
+        if needs_diagram:
+            try:
+                diagram_data = diagram_service.generate_diagram(
+                    decision.get("diagram_query", ""),
+                    chunks
+                )
+                if diagram_data and diagram_data.get("success"):
+                    diagram_response = {
+                        "explanation": diagram_data["explanation"],
+                        "diagram": diagram_data["diagram"]
+                    }
+            except Exception as e:
+                print(f"[Diagram Error] {e}")
+
+        await db.query_history.insert_one({
+            "conversation_id": conversation_id,
+            "user_id": current_user.get("user_id"),
+            "email": current_user.get("email"),
+            "question": question,
+            "answer": final_answer.answer,
+            "sources": [c.model_dump() for c in final_answer.citations],
+            "diagram": diagram_response,
+            "timestamp": datetime.utcnow()
+        })
 
         return {
-            "question": question,
-            "answer": answer,   # includes citations
-            "diagram": diagram_data
+            "answer": final_answer.model_dump() if final_answer else {},
+            "diagram": diagram_response
+        }
+
+    except Exception as e:
+        return {
+            "answer": "",
+            "citations": [],
+            "diagram": None,
+            "error": str(e)
         }

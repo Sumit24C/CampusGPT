@@ -12,8 +12,8 @@ from routes import (
     seed_router,
     query_router,
     ingest_router,
-    
 )
+
 from routes.diagram_routes import router as diagram_router
 
 # Configure logging

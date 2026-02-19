@@ -31,7 +31,7 @@ function App() {
             <StudentDashboard />
           </ProtectedRoute>
         } />
-        <Route path="/student/chat" element={
+        <Route path="/student/chat/:sessionId?" element={
           <ProtectedRoute allowedRoles={['student']}>
             <StudentChat />
           </ProtectedRoute>

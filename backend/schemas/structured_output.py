@@ -7,8 +7,7 @@ class Citation(BaseModel):
     document_id: str = Field(..., description="Internal document identifier")
     chunk_index: int = Field(..., description="Chunk index used as evidence")
     document_url: str = Field(..., description="Download URL of the document")
-    excerpt: str = Field(..., description="Exact excerpt supporting the answer")
-
+    uploaded_by: str = Field(..., description="User details used as a uploader reference")
 
 class StructuredRAGAnswer(BaseModel):
     answer: str = Field(..., description="Final grounded answer to the user query")
