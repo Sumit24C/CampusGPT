@@ -6,6 +6,7 @@ import { Badge } from '../../components/ui/badge';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import axios from 'axios';
+import { appColors } from '../../config/colors.js';
 
 export default function StudentEvents() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,7 +57,7 @@ export default function StudentEvents() {
 
   return (
     <Layout role="student">
-      <div className="space-y-8">
+      <div className="space-y-8" style={{ backgroundColor: appColors.mainBackground, minHeight: '100vh', padding: '1.5rem' }}>
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold md:text-3xl">Campus events</h1>
           <p className="text-sm text-muted-foreground md:text-base">
@@ -67,7 +68,7 @@ export default function StudentEvents() {
         {/* Search and quick stats */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <Card className="border border-border bg-card shadow-md shadow-black/20">
+            <Card className="border border-border shadow-md shadow-black/20" style={{ backgroundColor: appColors.sidebarBackground }}>
               <CardContent className="p-6">
                 <div className="relative">
                   <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -83,7 +84,7 @@ export default function StudentEvents() {
             </Card>
           </div>
 
-          <Card className="border border-border bg-card shadow-md shadow-black/20">
+          <Card className="border border-border shadow-md shadow-black/20" style={{ backgroundColor: appColors.sidebarBackground }}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -99,7 +100,7 @@ export default function StudentEvents() {
         </div>
 
         {/* Category Filter */}
-        <Card className="mb-6 border border-border bg-card shadow-md shadow-black/20">
+        <Card className="mb-6 border border-border shadow-md shadow-black/20" style={{ backgroundColor: appColors.sidebarBackground }}>
           <CardContent className="p-6">
             <div className="flex items-center gap-3 overflow-x-auto">
               <Filter className="h-4 w-4 text-muted-foreground" />
@@ -127,7 +128,8 @@ export default function StudentEvents() {
           {filteredEvents.map((event) => (
             <Card
               key={event.id}
-              className="border border-border bg-card shadow-md shadow-black/20 transition-transform duration-150 hover:scale-[1.02]"
+              className="border border-border shadow-md shadow-black/20 transition-transform duration-150 hover:scale-[1.02]"
+              style={{ backgroundColor: appColors.sidebarBackground }}
             >
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
@@ -206,7 +208,7 @@ export default function StudentEvents() {
         </div>
 
         {filteredEvents.length === 0 && (
-          <Card className="border border-border bg-card shadow-md shadow-black/20">
+          <Card className="border border-border shadow-md shadow-black/20" style={{ backgroundColor: appColors.sidebarBackground }}>
             <div className="p-10 text-center">
               <Calendar className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
               <p className="mb-1 text-sm font-semibold text-foreground">No events found</p>

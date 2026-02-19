@@ -27,6 +27,7 @@ import {
 } from "../../components/ui/accordion";
 import { Badge } from "../../components/ui/badge";
 import { queryAPI, studentAPI } from "../../services/api";
+import { appColors } from "../../config/colors.js";
 
 export default function StudentChat() {
   const [messages, setMessages] = useState([]);
@@ -199,7 +200,7 @@ export default function StudentChat() {
     <Layout role="student">
       <div className="flex h-[calc(100vh-4rem)] flex-col gap-4 md:h-[calc(100vh-4rem)] md:flex-row md:gap-6">
         {/* Chat history sidebar */}
-        <Card className="hidden h-full w-full flex-col border border-border bg-card shadow-md shadow-black/20 md:flex md:w-72">
+        <Card className="hidden h-full w-full flex-col border border-border shadow-md shadow-black/20 md:flex md:w-72" style={{ backgroundColor: appColors.sidebarBackground }}>
           <CardContent className="flex flex-1 flex-col p-3 sm:p-4">
             <div className="mb-3 flex items-center justify-between gap-2 sm:mb-4">
               <div>
@@ -237,7 +238,7 @@ export default function StudentChat() {
         </Card>
 
         {/* Chat window */}
-        <Card className="flex h-full flex-1 flex-col border border-border bg-card shadow-md shadow-black/20">
+        <Card className="flex h-full flex-1 flex-col border border-border shadow-md shadow-black/20" style={{ backgroundColor: appColors.sidebarBackground }}>
           {/* Top bar */}
           <div className="flex flex-shrink-0 flex-col gap-2 border-b border-border px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-3">
             <div className="space-y-0.5">
@@ -329,8 +330,9 @@ export default function StudentChat() {
                         className={
                           msg.sender === 'user'
                             ? 'rounded-2xl border-none bg-surface-2 text-foreground'
-                            : 'rounded-2xl border border-border bg-card text-foreground'
+                            : 'rounded-2xl border border-border text-foreground'
                         }
+                        style={msg.sender !== 'user' ? { backgroundColor: appColors.sidebarBackground } : {}}
                       >
                         <CardContent className="p-2.5 text-xs leading-relaxed sm:p-3 sm:text-sm">
                           {msg.text ? (

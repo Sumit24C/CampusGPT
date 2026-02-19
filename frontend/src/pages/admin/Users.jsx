@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import { adminAPI } from '../../services/api';
 import { User, Mail } from 'lucide-react';
+import { appColors } from '../../config/colors.js';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -21,15 +22,15 @@ export default function AdminUsers() {
 
   return (
     <Layout role="admin">
-      <div className="space-y-8">
+      <div className="space-y-8" style={{ backgroundColor: appColors.mainBackground, minHeight: '100vh', padding: '1.5rem' }}>
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold md:text-3xl">User management</h1>
-          <p className="text-sm text-[#9CA3AF] md:text-base">
+          <h1 className="text-2xl font-semibold md:text-3xl" style={{ color: appColors.primaryText }}>User management</h1>
+          <p className="text-sm md:text-base" style={{ color: appColors.mutedText }}>
             View and manage all system users.
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-[#1F2937] bg-[#111827] shadow-md shadow-black/20">
+        <div className="overflow-hidden rounded-xl border shadow-md shadow-black/20" style={{ backgroundColor: appColors.sidebarBackground, borderColor: appColors.cardBorder }}>
           <div className="overflow-x-auto">
             <table className="w-full text-xs sm:text-sm">
               <thead className="border-b border-[#1F2937] bg-[#020617]">

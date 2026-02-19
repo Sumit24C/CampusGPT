@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Layout from '../../components/Layout';
 import { Upload as UploadIcon, File } from 'lucide-react';
 import { Button } from '../../components/ui/button';
+import { appColors } from '../../config/colors.js';
 
 export default function FacultyUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -21,15 +22,15 @@ export default function FacultyUpload() {
 
   return (
     <Layout role="faculty">
-      <div className="space-y-8">
+      <div className="space-y-8" style={{ backgroundColor: appColors.mainBackground, minHeight: '100vh', padding: '1.5rem' }}>
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold md:text-3xl">Upload content</h1>
-          <p className="text-sm text-[#9CA3AF] md:text-base">
+          <h1 className="text-2xl font-semibold md:text-3xl" style={{ color: appColors.primaryText }}>Upload content</h1>
+          <p className="text-sm md:text-base" style={{ color: appColors.mutedText }}>
             Share educational materials with your students and power CampusGPT.
           </p>
         </div>
 
-        <div className="rounded-xl border border-[#1F2937] bg-[#111827] p-4 sm:p-6 md:p-8 shadow-md shadow-black/20">
+        <div className="rounded-xl border p-4 sm:p-6 md:p-8 shadow-md shadow-black/20" style={{ backgroundColor: appColors.sidebarBackground, borderColor: appColors.cardBorder }}>
           {/* Upload Area */}
           <div className="rounded-xl border-2 border-dashed border-[#1F2937] p-6 sm:p-8 md:p-10 text-center">
             <UploadIcon size={32} className="mx-auto mb-3 text-[#6B7280] sm:mb-4 sm:w-10 sm:h-10" />
