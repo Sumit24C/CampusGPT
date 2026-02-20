@@ -7,6 +7,7 @@ import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import axios from 'axios';
 import { appColors } from '../../config/colors.js';
+import apiClient from '@/services/api';
 
 export default function StudentEvents() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,7 +23,7 @@ export default function StudentEvents() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/events/upcoming', {
+      const response = await apiClient.get(`/events/upcoming`, {
         params: { limit: 50 }
       });
       setEvents(response.data.events || []);

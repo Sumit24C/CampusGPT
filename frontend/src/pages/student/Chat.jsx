@@ -70,21 +70,6 @@ export default function StudentChat() {
         initializeSession();
     }, [paramSessionId, navigate]);
 
-    // useEffect(() => {
-    //     if (!isSessionReady || !sessionId) return;
-
-    //     const loadMessages = async () => {
-    //         try {
-    //             const res = await studentAPI.getSession(sessionId);
-    //             setMessages(res.data.messages || []);
-    //         } catch (err) {
-    //             console.error(err);
-    //         }
-    //     };
-
-    //     loadMessages();
-    // }, [sessionId, isSessionReady]);
-
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -238,7 +223,7 @@ export default function StudentChat() {
                         </div>
                     </div>
                 )}
-                <div className="flex h-[calc(100vh-4rem)] gap-6">
+                <div className="flex h-[calc(100vh-4rem)] gap-4">
                     {/* Chat history sidebar */}
                     <Card className="hidden h-full w-72 flex-col border border-border bg-card shadow-md shadow-black/20 md:flex">
                         <CardContent className="flex flex-1 flex-col p-4">

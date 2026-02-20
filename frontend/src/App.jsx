@@ -25,7 +25,7 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route path="/student/dashboard" element={<StudentDashboard />} />
-        <Route path="/student/chat" element={<StudentChat />} />
+        <Route path="/student/chat/:sessionId?" element={<StudentChat />} />
         <Route path="/student/history" element={<StudentHistory />} />
         <Route path="/student/events" element={<StudentEvents />} />
         <Route path="/student/resources" element={<StudentResources />} />
