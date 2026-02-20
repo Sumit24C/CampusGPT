@@ -70,20 +70,20 @@ export default function StudentChat() {
         initializeSession();
     }, [paramSessionId, navigate]);
 
-    useEffect(() => {
-        if (!isSessionReady || !sessionId) return;
+    // useEffect(() => {
+    //     if (!isSessionReady || !sessionId) return;
 
-        const loadMessages = async () => {
-            try {
-                const res = await studentAPI.getSession(sessionId);
-                setMessages(res.data.messages || []);
-            } catch (err) {
-                console.error(err);
-            }
-        };
+    //     const loadMessages = async () => {
+    //         try {
+    //             const res = await studentAPI.getSession(sessionId);
+    //             setMessages(res.data.messages || []);
+    //         } catch (err) {
+    //             console.error(err);
+    //         }
+    //     };
 
-        loadMessages();
-    }, [sessionId, isSessionReady]);
+    //     loadMessages();
+    // }, [sessionId, isSessionReady]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -125,7 +125,7 @@ export default function StudentChat() {
 
         try {
             const res = await queryAPI.askQuestion(question, sessionId);
-
+            console.log(res)
             const answerObj = res?.data?.answer || {};
             if (!answerObj.answer) {
                 throw new Error("Invalid structured response");

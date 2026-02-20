@@ -81,7 +81,7 @@ async def ask_question(
             "diagram": diagram_response,
             "timestamp": datetime.utcnow()
         })
-
+        print(final_answer)
         return {
             "answer": final_answer.model_dump() if final_answer else {},
             "diagram": diagram_response
