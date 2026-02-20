@@ -2,18 +2,18 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 
-from config import settings
+from config import settings, UPLOADS_DIR, VECTOR_DB_DIR
 from database import connect_to_mongo, close_mongo_connection
 from routes import (
     auth_router,
     student_router,
     faculty_router,
     admin_router,
-    seed_router,
     query_router,
     ingest_router,
-    
+    events_router
 )
+
 from routes.diagram_routes import router as diagram_router
 
 # Configure logging
@@ -30,6 +30,9 @@ app = FastAPI(
     version="1.0.0"
 )
 
+UPLOADS_DIR.mkdir(exist_ok=True)
+VECTOR_DB_DIR.mkdir(exist_ok=True)
+
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
@@ -37,6 +40,7 @@ app.add_middleware(
     allow_origins=settings.CORS_ORIGINS.split(','),
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Event handlers
@@ -55,12 +59,10 @@ app.include_router(auth_router, prefix=settings.API_PREFIX)
 app.include_router(student_router, prefix=settings.API_PREFIX)
 app.include_router(faculty_router, prefix=settings.API_PREFIX)
 app.include_router(admin_router, prefix=settings.API_PREFIX)
-app.include_router(seed_router, prefix=settings.API_PREFIX)
 app.include_router(query_router, prefix=settings.API_PREFIX)
 app.include_router(ingest_router, prefix=settings.API_PREFIX)
+app.include_router(events_router, prefix=settings.API_PREFIX)
 app.include_router(diagram_router, prefix=settings.API_PREFIX + "/diagram")
-
-# Root endpointgit status
 
 @app.get("/")
 async def root():
