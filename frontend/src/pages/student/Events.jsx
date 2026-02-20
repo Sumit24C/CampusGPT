@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
-import { Calendar, Clock, MapPin, Users, Star, Filter, Search, Bell, Bookmark, TrendingUp } from 'lucide-react';
+import { Calendar, Clock, MapPin, Users, Star, Filter, Search, Bell, Bookmark, TrendingUp, Award, Music, Trophy, BookOpen, Heart, Flag, Cpu, Palette } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import axios from 'axios';
 import { appColors } from '../../config/colors.js';
-import apiClient from '@/services/api';
 
 export default function StudentEvents() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,7 +22,7 @@ export default function StudentEvents() {
 
   const fetchEvents = async () => {
     try {
-      const response = await apiClient.get(`/events/upcoming`, {
+      const response = await axios.get('http://localhost:8000/api/events/upcoming', {
         params: { limit: 50 }
       });
       setEvents(response.data.events || []);
@@ -46,6 +45,43 @@ export default function StudentEvents() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
+  const getEventImage = (category) => {
+    const images = {
+      technical: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop',
+      cultural: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&auto=format&fit=crop',
+      sports: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&auto=format&fit=crop',
+      workshop: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop',
+      academic: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop',
+      nss: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&auto=format&fit=crop',
+      ncc: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?w=800&auto=format&fit=crop',
+      other: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&auto=format&fit=crop'
+    };
+    return images[category?.toLowerCase()] || images.other;
+  };
+
+  const getEventIcon = (category) => {
+    const icons = {
+      technical: Cpu,
+      cultural: Music,
+      sports: Trophy,
+      workshop: Award,
+      academic: BookOpen,
+      nss: Heart,
+      ncc: Flag,
+      other: Star
+    };
+    const IconComponent = icons[category?.toLowerCase()] || icons.other;
+    return <IconComponent className="h-6 w-6" />;
+  };
+
+  const getMonthDay = (dateStr) => {
+    const date = new Date(dateStr);
+    return {
+      month: date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+      day: date.getDate()
+    };
+  };
+
   if (loading) {
     return (
       <Layout role="student">
@@ -59,11 +95,22 @@ export default function StudentEvents() {
   return (
     <Layout role="student">
       <div className="space-y-8" style={{ backgroundColor: appColors.mainBackground, minHeight: '100vh', padding: '1.5rem' }}>
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold md:text-3xl">Campus events</h1>
-          <p className="text-sm text-muted-foreground md:text-base">
-            Discover and join exciting events happening on campus.
-          </p>
+        {/* Header with gradient title */}
+        <div className="relative space-y-2 pb-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/30">
+              <Calendar className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-foreground md:text-4xl">
+                Campus Events Timeline
+              </h1>
+              <p className="text-sm text-muted-foreground md:text-base">
+                Explore upcoming events in chronological order
+              </p>
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
         </div>
 
         {/* Search and quick stats */}
@@ -124,88 +171,146 @@ export default function StudentEvents() {
           </CardContent>
         </Card>
 
-        {/* Events Grid */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {filteredEvents.map((event) => (
-            <Card
-              key={event.id}
-              className="border border-border shadow-md shadow-black/20 transition-transform duration-150 hover:scale-[1.02]"
-              style={{ backgroundColor: appColors.sidebarBackground }}
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="mb-2 flex items-center gap-2">
-                      <Badge className="border border-border bg-surface-2 px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                        {event.category}
-                      </Badge>
-                      {event.is_featured && (
-                        <Badge className="border border-border bg-surface-2 px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                          <Star className="mr-1 h-3 w-3 text-primary" />
-                          Featured
-                        </Badge>
-                      )}
+        {/* Events Timeline */}
+        <div className="relative mx-auto max-w-5xl">
+          {/* Vertical Timeline Line */}
+          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 via-primary/30 to-transparent md:left-1/2" />
+          
+          {/* Timeline Events */}
+          <div className="space-y-12">
+            {filteredEvents.map((event, index) => {
+              const dateInfo = getMonthDay(event.date);
+              const isEven = index % 2 === 0;
+              
+              return (
+                <div
+                  key={event.id}
+                  className={`relative flex items-center gap-8 ${
+                    isEven ? 'md:flex-row' : 'md:flex-row-reverse'
+                  } flex-row`}
+                >
+                  {/* Date Badge - Always on left for mobile, alternates on desktop */}
+                  <div className="flex-shrink-0">
+                    <div className="flex h-16 w-16 flex-col items-center justify-center rounded-2xl border-2 border-primary bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg shadow-primary/20">
+                      <span className="text-[10px] font-bold text-primary">{dateInfo.month}</span>
+                      <span className="text-2xl font-bold text-foreground">{dateInfo.day}</span>
                     </div>
-                    <CardTitle className="text-sm font-semibold text-foreground">
-                      {event.title}
-                    </CardTitle>
                   </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 rounded-lg border border-border bg-surface-2 text-muted-foreground hover:bg-surface"
-                  >
-                    <Bookmark className="h-4 w-4" />
-                  </Button>
-                </div>
-                <CardDescription className="mt-3 text-xs text-muted-foreground">
-                  {event.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="mb-4 space-y-3 text-xs">
-                  <div className="flex items-center gap-3 text-foreground">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2">
-                      <Calendar size={14} className="text-primary" />
+
+                  {/* Timeline Dot */}
+                  <div className="absolute left-8 md:left-1/2 -translate-x-1/2 flex h-6 w-6 items-center justify-center">
+                    <div className="absolute h-6 w-6 animate-ping rounded-full bg-primary/30" />
+                    <div className="relative flex h-5 w-5 items-center justify-center rounded-full border-2 border-primary bg-[#020617] text-primary">
+                      <div className="h-2 w-2 rounded-full bg-primary" />
                     </div>
-                    <span>{formatDate(event.date)} ({event.day})</span>
                   </div>
-                  {event.location && (
-                    <div className="flex items-center gap-3 text-foreground">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2">
-                        <MapPin size={14} className="text-foreground" />
+
+                  {/* Event Card */}
+                  <div className={`flex-1 ${isEven ? 'md:pr-12' : 'md:pl-12'} pl-8`}>
+                    <Card
+                      className="group overflow-hidden border border-border shadow-lg shadow-black/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1"
+                      style={{ backgroundColor: appColors.sidebarBackground }}
+                    >
+                      {/* Event Image */}
+                      <div className="relative h-48 w-full overflow-hidden">
+                        <img
+                          src={getEventImage(event.category)}
+                          alt={event.title}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                        
+                        {/* Category Badge on Image */}
+                        <div className="absolute top-4 left-4 flex items-center gap-2">
+                          <Badge className="flex items-center gap-1.5 border border-primary/30 bg-primary/90 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-white">
+                            {getEventIcon(event.category)}
+                            {event.category}
+                          </Badge>
+                          {event.is_featured && (
+                            <Badge className="flex items-center gap-1 border border-yellow-500/30 bg-yellow-500/90 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-white">
+                              <Star className="h-3 w-3" />
+                              Featured
+                            </Badge>
+                          )}
+                        </div>
+
+                        {/* Event Title on Image */}
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <h3 className="text-xl font-bold text-white line-clamp-2">
+                            {event.title}
+                          </h3>
+                        </div>
                       </div>
-                      <span>{event.location}</span>
-                    </div>
-                  )}
-                  {event.organizer && (
-                    <div className="flex items-center gap-3 text-foreground">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2">
-                        <Users size={14} className="text-primary" />
-                      </div>
-                      <span>{event.organizer}</span>
-                    </div>
-                  )}
+
+                      <CardContent className="p-6">
+                        <CardDescription className="mb-4 text-sm text-muted-foreground line-clamp-2">
+                          {event.description}
+                        </CardDescription>
+
+                        {/* Event Details */}
+                        <div className="mb-4 space-y-3">
+                          <div className="flex items-center gap-3 text-sm text-foreground">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface-2">
+                              <Calendar size={16} className="text-primary" />
+                            </div>
+                            <div>
+                              <span className="font-medium">{formatDate(event.date)}</span>
+                              <span className="ml-2 text-muted-foreground">({event.day})</span>
+                            </div>
+                          </div>
+                          
+                          {event.location && (
+                            <div className="flex items-center gap-3 text-sm text-foreground">
+                              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface-2">
+                                <MapPin size={16} className="text-foreground" />
+                              </div>
+                              <span>{event.location}</span>
+                            </div>
+                          )}
+                          
+                          {event.organizer && (
+                            <div className="flex items-center gap-3 text-sm text-foreground">
+                              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface-2">
+                                <Users size={16} className="text-primary" />
+                              </div>
+                              <span>{event.organizer}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-3">
+                          <Button
+                            type="button"
+                            className="flex-1 h-11 rounded-xl bg-primary text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+                          >
+                            Register Now
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="h-11 w-11 rounded-xl border-border bg-surface-2 text-foreground hover:bg-surface hover:text-primary transition-colors"
+                          >
+                            <Bell size={18} />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="h-11 w-11 rounded-xl border-border bg-surface-2 text-foreground hover:bg-surface hover:text-primary transition-colors"
+                          >
+                            <Bookmark size={18} />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Spacer for alternating layout on desktop */}
+                  <div className="hidden md:block flex-1" />
                 </div>
-                <div className="flex gap-3">
-                  <Button
-                    type="button"
-                    className="flex-1 h-10 rounded-xl bg-primary text-sm font-medium text-primary-foreground hover:bg-primary/90"
-                  >
-                    Register now
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-10 rounded-xl border-border bg-surface-2 text-sm text-foreground hover:bg-surface"
-                  >
-                    <Bell size={18} />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+              );
+            })}
+          </div>
         </div>
 
         {filteredEvents.length === 0 && (
