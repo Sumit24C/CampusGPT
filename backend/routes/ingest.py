@@ -25,14 +25,14 @@ async def ingest_document(file: UploadFile = File(...), current_user: dict = Dep
             folder="campusgpt/documents"
         )
 
-        ingest_pipeline(
-            doc_path=str(file_path),
-            persist_directory=str(VECTOR_DB_DIR),
-            document_id=document_id,
-            document_name=original_filename,
-            document_url=upload_result["url"],         
-            uploader=current_user["email"]
-        )
+        # ingest_pipeline(
+        #     doc_path=str(file_path),
+        #     persist_directory=str(VECTOR_DB_DIR),
+        #     document_id=document_id,
+        #     document_name=original_filename,
+        #     document_url=upload_result["url"],         
+        #     uploader=current_user["email"]
+        # )
 
         return {
             "message": "Document ingested successfully",
